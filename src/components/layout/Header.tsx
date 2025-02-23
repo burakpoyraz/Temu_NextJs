@@ -4,6 +4,10 @@ import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 import { IoMdMenu, IoMdSearch } from "react-icons/io";
 import { HiOutlineShoppingBag } from "react-icons/hi";
+import { User } from "@prisma/client";
+
+import { logoutUser } from "@/actions/auth";
+import { useRouter } from "next/navigation";
 
 const AnnouncementBar = () => {
   return (
@@ -17,7 +21,13 @@ const AnnouncementBar = () => {
   );
 };
 
-const Header = () => {
+type HeaderProps = {
+  user: Omit<User, "passwordHash"> | null;
+};
+
+const Header = ({ user }: HeaderProps) => {
+const router = useRouter();
+
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
 
@@ -62,12 +72,37 @@ const Header = () => {
                 <Link href="#">Sale</Link>
               </nav>
             </div>
-            <Link href="#">link</Link>
+            <Link href="#" className="absolute left-1/2 -translate-x-1/2">
+              <span className="text-xl sm:text-2xl font-bold tracking-tight">
+                DEAL
+              </span>
+            </Link>
 
             <div className="flex flex-1 justify-end items-center text-sm gap-2 sm:gap-4">
               <IoMdSearch className="text-gray-700 hover:text-gray-900 text-xl cursor-pointer" />
-              <Link href="auth/sign-in">Sign İn</Link>
-              <Link href="auth/sign-up">Sign Up</Link>
+
+              {user ? (
+                <div className="flex items-center gap-2 sm:gap-4">
+                  <span className="text-gray-700 text-sm">{user.email}</span>
+                  <Link
+                    href="#"
+                    className="text-gray-700 hover:text-gray-900 text-xs sm:text-sm font-medium"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      await logoutUser();
+                      router.refresh();
+                    }}
+                  >
+                    Sign Out
+                  </Link>
+                </div>
+              ) : (
+                <React.Fragment>
+                  <Link  className="text-gray-700 hover:text-gray-900 text-xs sm:text-sm font-medium" href="/auth/sign-in">Sign İn</Link>
+                  <Link  className="text-gray-700 hover:text-gray-900 text-xs sm:text-sm font-medium" href="/auth/sign-up">Sign Up</Link>
+                </React.Fragment>
+              )}
+
               <div className="relative inline-block">
                 {/* Sepet İkonu */}
                 <HiOutlineShoppingBag className="text-gray-700 hover:text-gray-900 text-2xl cursor-pointer" />
