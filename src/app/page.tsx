@@ -1,19 +1,22 @@
 import Image from "next/image";
 import { getCurrentSession } from "@/actions/auth";
+import { getAllProducts } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
+import SalesCampaignBanner from "@/components/layout/SalesCampaignBanner";
 
-const  Home= async()=> {
-
+const Home = async () => {
   const { user } = await getCurrentSession();
 
-  
-  console.log(JSON.stringify(user));
   return (
     <div>
-      <h1>{JSON.stringify(user)}</h1>
-      </div>
+      <SalesCampaignBanner/>
+      <section className="container mx-auto py-8">
+        ProductGrid
+        
+      </section>
+      <h1>Home</h1>
+    </div>
   );
-}
+};
 
 export default Home;
-
-
