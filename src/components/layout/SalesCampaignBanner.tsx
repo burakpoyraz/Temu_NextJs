@@ -15,10 +15,10 @@ const SalesCampaignBanner = () => {
             <span className="text-xl sm:text-2xl font-bold animate-bounce">
               🔥
             </span>
-            <div className="text-sm sm:text-base font-bold">
+            <div className="text-sm text-white sm:text-base font-bold">
               Flash Sale Ends In :
             </div>
-            <div className="text-sm sm:text-base font-mono font-bold bg-white/20 p-1 px-2 rounded-md">
+            <div className="text-sm text-white sm:text-base font-mono font-bold bg-white/20 p-1 px-2 rounded-md">
               23:59:59
             </div>
           </div>

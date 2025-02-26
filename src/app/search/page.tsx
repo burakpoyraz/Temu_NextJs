@@ -1,24 +1,18 @@
 import SalesCampaignBanner from "@/components/layout/SalesCampaignBanner";
 import ProductGrid from "@/components/product/ProductGrid";
-import {
-  getCategoryBySlug,
-  getProductsByCategorySlug,
-} from "@/sanity/lib/client";
+import { searchProducts } from "@/sanity/lib/client";
 import React from "react";
 
-type CategoryPageProps = {
-  params: Promise<{ slug: string }>;
+type SearchPageProps = {
+  searchParams: { query?: string };
 };
 
-const CategoryPage = async ({ params }: CategoryPageProps) => {
-  const { slug } = await params;
+const SearchPage = async ({ searchParams }: SearchPageProps) => {
+  const { query="" } = searchParams;
 
-  const [category, products] = await Promise.all([
-    getCategoryBySlug(slug),
-    getProductsByCategorySlug(slug),
-  ]);
+  const products = await searchProducts(query);
+  const hasProducts = products.length > 0;
 
-  console.log(category, products);
 
   return (
     <div>
@@ -26,7 +20,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
       <div className="bg-red-50 p-4">
         <div className="container mx-auto">
           <h1 className="text-2xl md:text-3xl text-center font-bold text-red-600 mb-2">
-            {category.title} - UP TO 90%
+           Search Results for &quot;{query}&quot; - UP TO 90% OFF
           </h1>
           <p className="text-center text-red-500 text-sm md:text-base animate-pulse">
             ⚡ Flash Sale Ending Soon! | ⏳ Limited Time Only
@@ -52,16 +46,24 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         </div>
       </div>
       <section className="container mx-auto py-8">
-        <div className="text-center mb-8">
-          <p className="text-sm text-gray-500 mb-6">
-            Showing {products.length} products in {category.title} category
-          </p>
-
-          <ProductGrid products={products} />
-        </div>
+        {hasProducts ? (
+          <div className="text-center mb-8">
+            <p className="text-sm text-gray-500 mb-6">
+              Showing {products.length} {products.length === 1 ? "product" : "products"} in search results for &quot;{query}&quot;
+            </p>
+            <ProductGrid products={products} />
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <h2 className="text-xl font-semibold text-gray-700 mb-2">No products found</h2>
+            <p className="text-gray-500">
+              We couldn't find any products matching &quot;{query}&quot;. Try using different keywords or browse our categories.
+            </p>
+          </div>
+        )}
       </section>
     </div>
   );
 };
 
-export default CategoryPage;
+export default SearchPage;

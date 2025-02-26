@@ -8,6 +8,7 @@ import { User } from "@prisma/client";
 
 import { logoutUser } from "@/actions/auth";
 import { useRouter } from "next/navigation";
+import HeaderSearchBar from "./HeaderSearchBar";
 
 const AnnouncementBar = () => {
   return (
@@ -73,14 +74,14 @@ const router = useRouter();
                 <Link href="#">Sale</Link>
               </nav>
             </div>
-            <Link href="#" className="absolute left-1/2 -translate-x-1/2">
+            <Link href="/" className="absolute left-1/2 -translate-x-1/2">
               <span className="text-xl sm:text-2xl font-bold tracking-tight">
                 DEAL
               </span>
             </Link>
 
             <div className="flex flex-1 justify-end items-center text-sm gap-2 sm:gap-4">
-              <IoMdSearch className="text-gray-700 hover:text-gray-900 text-xl cursor-pointer" />
+              <HeaderSearchBar/>
 
               {user ? (
                 <div className="flex items-center gap-2 sm:gap-4">
